@@ -351,8 +351,9 @@
 
 /* For source only. Modified in gulp for dist */
 @imagePath : '../../themes/default/assets/images';
-@fontPath  : '/semantic/themes/default/assets/fonts';
-
+@fontPath  : '../../themes/default/assets/fonts';
+@imagePath : '~root/semantic/src/themes/default/assets/images';
+@fontPath  : '~root/semantic/src/themes/default/assets/fonts';
 /*-------------------
        Em Sizes
 --------------------*/
