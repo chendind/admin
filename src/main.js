@@ -7,11 +7,7 @@ window.jQuery = window.$ = jQuery
 import Vue from 'vue'
 import router from './router'
 import '../static/semantic/src/semantic.less'
-require.context(
-  'file?name=[path][name].[ext]&context=node_modules/tinymce!tinymce',
-  true,
-  /.*/
-);
+
 jQuery(()=>{
 	require('../static/semantic/dist/semantic.min.js');
 
