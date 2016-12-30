@@ -2,12 +2,13 @@ var path = require('path')
 var config = require('../config')
 var utils = require('./utils')
 var projectRoot = path.resolve(__dirname, '../')
-
+var copyWebpackPlugin = require('copy-webpack-plugin');
 var env = process.env.NODE_ENV
 // check env & config/index.js to decide whether to enable CSS source maps for the
 // various preprocessor loaders added to vue-loader at the end of this file
 var cssSourceMapDev = (env === 'development' && config.dev.cssSourceMap)
 var cssSourceMapProd = (env === 'production' && config.build.productionSourceMap)
+
 var useCssSourceMap = cssSourceMapDev || cssSourceMapProd
 
 module.exports = {
@@ -67,6 +68,14 @@ module.exports = {
       }
     ]
   },
+  plugins: [
+      // new copyWebpackPlugin([
+      //     { from: './node_modules/tinymce/plugins', to: './plugins' },
+      //     { from: './node_modules/tinymce/themes', to: './themes' },
+      //     { from: './node_modules/tinymce/skins', to: './skins' },
+      //     { from: './node_modules/tinymce/langs', to: './langs' }
+      // ])
+  ],
   vue: {
     loaders: utils.cssLoaders({ sourceMap: useCssSourceMap }),
     postcss: [

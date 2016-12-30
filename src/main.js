@@ -6,15 +6,20 @@ window.jQuery = window.$ = jQuery
 
 import Vue from 'vue'
 import router from './router'
-import '../semantic/src/semantic.less'
+import '../static/semantic/src/semantic.less'
+require.context(
+  'file?name=[path][name].[ext]&context=node_modules/tinymce!tinymce',
+  true,
+  /.*/
+);
 jQuery(()=>{
-	require('../semantic/dist/semantic.min.js');
-	/* eslint-disable no-new */
-new Vue({
-  el: '#app',
-  router,
-  mounted: function(){}
-})
+	require('../static/semantic/dist/semantic.min.js');
+
+	new Vue({
+	  el: '#app',
+	  router,
+	  mounted: function(){}
+	})
 })
 
 
