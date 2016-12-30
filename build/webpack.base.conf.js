@@ -69,12 +69,12 @@ module.exports = {
     ]
   },
   plugins: [
-      new copyWebpackPlugin([
-          { from: './node_modules/tinymce/plugins', to: './plugins' },
-          { from: './node_modules/tinymce/themes', to: './themes' },
-          { from: './node_modules/tinymce/skins', to: './skins' },
-          { from: './node_modules/tinymce/langs', to: './langs' }
-      ])
+      // new copyWebpackPlugin([
+      //     { from: './node_modules/tinymce/plugins', to: './plugins' },
+      //     { from: './node_modules/tinymce/themes', to: './themes' },
+      //     { from: './node_modules/tinymce/skins', to: './skins' },
+      //     { from: './node_modules/tinymce/langs', to: './langs' }
+      // ])
   ],
   vue: {
     loaders: utils.cssLoaders({ sourceMap: useCssSourceMap }),
