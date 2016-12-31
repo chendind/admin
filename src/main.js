@@ -6,12 +6,9 @@ window.jQuery = window.$ = jQuery
 
 import Vue from 'vue'
 import router from './router'
-import '../static/semantic/src/semantic.less'
-
 
 jQuery(()=>{
 	require('../static/semantic/dist/semantic.min.js');
-
 	new Vue({
 	  el: '#app',
 	  router,

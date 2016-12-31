@@ -1,7 +1,9 @@
 import Vue from 'vue'
 import VueRouter from 'vue-router'
 import Main from './Main.vue'
+import Form from './pages/Form.vue'
 import Business from './pages/Business.vue'
+import FormImageUpload from './pages/FormImageUpload.vue'
 Vue.use(VueRouter);
 const routes = [
   	{ 
@@ -13,6 +15,14 @@ const routes = [
 		      // UserProfile 会被渲染在 User 的 <router-view> 中
 		      path: 'business',
 		      component: Business
+		    },
+		    {
+		    	path: 'form',
+		    	component: Form
+		    },
+		    {
+		    	path: 'formImageUpload',
+		    	component: FormImageUpload
 		    }
 		]
 	}

@@ -38,6 +38,12 @@
               <router-link to="/business" class="item">
                 代理商管理
               </router-link>
+              <router-link to="/form" class="item">
+                表单
+              </router-link>
+              <router-link to="/formImageUpload" class="item">
+                表单-图片选择器
+              </router-link>
               <router-link to="/tinymce" class="item">
                 tinymce
               </router-link>

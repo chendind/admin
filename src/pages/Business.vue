@@ -3,10 +3,10 @@
   <div>
     <h1 class="ui dividing header">
       <div class="ui breadcrumb">
-      <a class="section">用户</a>
-      <i class="right angle icon divider"></i>
-      <div class="active section">代理商管理</div>
-    </div>
+        <a class="section">用户</a>
+        <i class="right angle icon divider"></i>
+        <div class="active section">代理商管理</div>
+      </div>
     </h1>
     <div class="ui category search">
       <div class="ui icon input">
@@ -72,16 +72,13 @@
         </th>
       </tr></tfoot>
     </table>
-    <tinymce height="300">content here</tinymce>
   </div>
 </template>
 
 <script>
-import tinymce from '../components/Tinymce.vue'
 export default {
   name: 'bussiness',
   components: {
-     tinymce
   },
   methods:{
   },

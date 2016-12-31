@@ -21,7 +21,8 @@ export default {
   	},
   	mounted(){
   		var self = this;
-	  	var editor =  new tinymce.Editor('tm', {
+  		tinymce.remove("#tm"); 
+  	  	var editor =  new tinymce.Editor('tm', {
 		    height: self.height,
 			theme: 'modern',
 			language: 'zh_CN',
