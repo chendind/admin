@@ -1,7 +1,13 @@
 <template>
-	<textarea id="tm">123</textarea>
+	<textarea id="tm"><slot></slot></textarea>
 </template>
 <script>
+require.context(
+  'file?name=[path][name].[ext]&context=node_modules/tinymce!tinymce',
+  true,
+  /.*/
+);
+import 'root/node_modules/tinymce/skins/lightgray/skin.min.css'
 import tinymce from 'tinymce'
 export default {
   	name: 'tinymce',
@@ -25,8 +31,8 @@ export default {
 			    'insertdatetime media nonbreaking save table contextmenu directionality',
 			    'emoticons template paste textcolor colorpicker textpattern imagetools'
 			],
-			toolbar1: 'insertfile undo redo | fontselect | fontsizeselect | styleselect | bold italic underline strikethrough superscript subscript | alignleft aligncenter alignright alignjustify | bullist numlist outdent indent | link image',
-			toolbar2: 'print preview media | forecolor backcolor emoticons', //| example
+			toolbar1: 'insertfile undo redo | fontselect | fontsizeselect | styleselect | bold italic underline strikethrough superscript subscript | alignleft aligncenter alignright alignjustify | bullist numlist outdent indent',
+			toolbar2: 'link image media | forecolor backcolor emoticons print preview', //| example
 			font_formats: '宋体=SimSun,STSong;黑体=SimHei,STHeiti;微软雅黑=Microsoft YaHei;楷体=KaiTi,STKaiti;Arial=arial,helvetica,sans-serif;Courier New=courier new,courier,monospace;AkrutiKndPadmini=Akpdmi-n',
 			indentation : '2em',
 			fontsize_formats: '8pt 10pt 12pt 14pt 18pt 24pt 36pt 48pt 60pt 72pt',
@@ -80,9 +86,7 @@ export default {
 			    { title: 'Test template 1', content: 'Test 1' },
 			    { title: 'Test template 2', content: 'Test 2' }
 			],
-			content_css: [
-			    // '//www.tinymce.com/css/codepen.min.css'
-			]
+			content_style: "body{font-family: sans-serif}"
 		}, tinymce.EditorManager);
 
 		editor.render();

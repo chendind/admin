@@ -2,8 +2,6 @@ import Vue from 'vue'
 import VueRouter from 'vue-router'
 import Main from './Main.vue'
 import Business from './pages/Business.vue'
-
-const Foo = { template: '<div>foo</div>' }
 Vue.use(VueRouter);
 const routes = [
   	{ 

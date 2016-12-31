@@ -72,7 +72,7 @@
         </th>
       </tr></tfoot>
     </table>
-    <tinymce height="300"></tinymce>
+    <tinymce height="300">content here</tinymce>
   </div>
 </template>
 
