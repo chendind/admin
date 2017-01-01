@@ -56,31 +56,27 @@
         </tr>
       </tbody>
       <tfoot>
-        <tr><th colspan="4">
-          <div class="ui right floated pagination menu">
-            <a class="icon item">
-              <i class="left chevron icon"></i>
-            </a>
-            <a class="item">1</a>
-            <a class="item">2</a>
-            <a class="item">3</a>
-            <a class="item">4</a>
-            <a class="icon item">
-              <i class="right chevron icon"></i>
-            </a>
-          </div>
-        </th>
-      </tr></tfoot>
+        <tr>
+          <th colspan="4">
+            <pagination id="pagination" current="1" total="1000" show="10" v-on:pageChange="pageChange"></pagination>
+          </th>
+        </tr>
+      </tfoot>
     </table>
   </div>
 </template>
 
 <script>
+import pagination from '../components/Pagination.vue'
 export default {
   name: 'bussiness',
   components: {
+    pagination
   },
   methods:{
+    pageChange(index){
+      console.log(index);
+    }
   },
   data () {
     return {

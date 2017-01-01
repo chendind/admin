@@ -36,13 +36,13 @@
             <a class="title"><i class="dropdown icon"></i> <b>用户</b></a>
             <div class="content menu">
               <router-link to="/business" class="item">
-                代理商管理
+                表格：代理商管理
               </router-link>
               <router-link to="/form" class="item">
-                表单
+                表单：文本输入与tinymce
               </router-link>
               <router-link to="/formImageUpload" class="item">
-                表单-图片选择器
+                表单：图片选择器
               </router-link>
             </div>
         </div>
