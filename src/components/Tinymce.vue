@@ -1,5 +1,11 @@
 <template>
-	<textarea id="tm"><slot></slot></textarea>
+	<div>
+		<textarea id="tm">
+			<slot></slot>
+		</textarea>
+		<image-choose-modal id="tinymce-imageChooseModal" v-on:finishChoose="finishChoose"></image-choose-modal>
+	</div>
+		
 </template>
 <script>
 require.context(
@@ -9,14 +15,27 @@ require.context(
 );
 import 'root/node_modules/tinymce/skins/lightgray/skin.min.css'
 import tinymce from 'tinymce'
+import imageChooseModal from '../components/ImageChooseModal.vue'
 export default {
   	name: 'tinymce',
   	props: ['height'],
+  	components: {
+  		'image-choose-modal': imageChooseModal
+  	},
   	methods:{
+  		waitFinishChoose(callback){
+  			self.deferred = $.Deferred();
+  			$.when(self.deferred).done(function(data){
+  				callback(data.src)
+  			})
+  		},
+  		finishChoose(src){
+  			self.deferred.resolve({"src": src})
+  		}
   	},
   	data () {
     	return {
-      		msg: 'Welcome to Your Vue.js App'
+      		deferred: {}
     	}
   	},
   	mounted(){
@@ -39,6 +58,7 @@ export default {
 			fontsize_formats: '8pt 10pt 12pt 14pt 18pt 24pt 36pt 48pt 60pt 72pt',
 			init_instance_callback: function (editor) {
 				editor.on('keydown', function (e) {
+					// tab键缩紧2格
 			    	if(e.keyCode == 9){
 			    		e.preventDefault();
 			    		this.execCommand("mceInsertContent", false, "&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;");
@@ -61,19 +81,8 @@ export default {
 
 			    // Provide image and alt text for the image dialog
 			    if (meta.filetype == 'image') {
-			    	var input = document.createElement("input");
-		                input.type = "file";
-		                input.accept="image/*";
-		                // input.mutiple = "mutiple";
-		                input.click();
-		            input.onchange = function(e){
-		            	var file = this.files[0];
-		            	var formData = new FormData();
-		            	formData.append("file",file);
-		            	console.log(file);
-		            	callback('myimage', {alt: 'My alt text'});
-	            	}
-			      
+			    	$("#tinymce-imageChooseModal").modal('show')
+			    	self.waitFinishChoose(callback);
 			    }
 
 			    // Provide alternative source and posted for the media dialog

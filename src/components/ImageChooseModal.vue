@@ -12,7 +12,6 @@
           <div v-for="(image, index) in images" class="ui small image" :class="{'disabled': index != checkedIndex}" :style="{backgroundImage: 'url('+image.src+')'}" @click="toggle(index)">
             
           </div>
-          <!-- <img v-for="(image, index) in images" class="ui small image" :class="{'disabled': index != checkedIndex}" :src="image.src" @click="toggle(index)"> -->
         </div>
       </div>
       <div class="actions">
@@ -35,6 +34,7 @@
 <script>
 var __src = "http://www.xiyoukeji.com/images/logo_xs.gif"
 export default {
+  name: 'imageChooseModal',
   data () {
     return {
       images: [],
@@ -100,7 +100,7 @@ export default {
 .images .image{
   cursor: pointer;
   background-position: center;
-  background-size: cover;
+  background-size: contain;
   height: 80px !important;
   width: 80px !important;
 }

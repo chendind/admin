@@ -21,10 +21,10 @@
                 <i class="settings icon"></i>
                 帐号设置
               </div>
-              <div class="item">
+              <router-link to="/login" class="item">
                 <i class="sign out icon"></i>
                 退出登录
-              </div>
+              </router-link>
             </div>
           </div>
         </div>
@@ -43,9 +43,6 @@
               </router-link>
               <router-link to="/formImageUpload" class="item">
                 表单-图片选择器
-              </router-link>
-              <router-link to="/tinymce" class="item">
-                tinymce
               </router-link>
             </div>
         </div>

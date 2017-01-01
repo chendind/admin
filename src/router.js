@@ -1,6 +1,7 @@
 import Vue from 'vue'
 import VueRouter from 'vue-router'
 import Main from './Main.vue'
+import Login from './Login.vue'
 import Form from './pages/Form.vue'
 import Business from './pages/Business.vue'
 import FormImageUpload from './pages/FormImageUpload.vue'
@@ -25,6 +26,11 @@ const routes = [
 		    	component: FormImageUpload
 		    }
 		]
+	},
+	{ 
+  		path: '/login', 
+  		component: Login,
+		children: []
 	}
 ]
 export default new VueRouter({

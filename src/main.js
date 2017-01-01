@@ -6,10 +6,10 @@ window.jQuery = window.$ = jQuery
 
 import Vue from 'vue'
 import router from './router'
-
+import 'assets/css/semantic-overwrite.css'
 jQuery(()=>{
-	require('../static/semantic/dist/semantic.min.js');
-	new Vue({
+	require('../static/semantic/dist/semantic.js');
+	var root = new Vue({
 	  el: '#app',
 	  router,
 	  mounted: function(){}
