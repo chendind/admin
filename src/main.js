@@ -4,8 +4,8 @@ var jQuery = require('jquery')
 window.jQuery = window.$ = jQuery
 
 import Vue from 'vue'
-import router from './router'
-import 'assets/css/semantic-overwrite.css'
+import router from './router/index.js'
+import 'assets/less/index.less'
 jQuery(()=>{
 	require('../static/semantic/dist/semantic.js');
 	var root = new Vue({

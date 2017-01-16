@@ -5,14 +5,14 @@
       <div class="ui fluid container">
         <div class="item">
           <a class="ui logo icon image">
-            <img style="width: 30px;" src="~assets/logo.png" alt="">
+            <img style="width: 30px;" src="~assets/img/logo.png" alt="">
           </a>
           西柚后台管理系统
         </div>
         <div class="item right">
           <div id="userDrapdown" class="ui inline dropdown">
             <div class="title">
-              <img class="ui avatar image" style="width: 30px;" src="~assets/eve.png" alt="">
+              <img class="ui avatar image" style="width: 30px;" src="~assets/img/eve.png" alt="">
               小柚子
               <i class="dropdown icon"></i>
             </div>
@@ -35,14 +35,20 @@
         <div class="item">
             <a class="title"><i class="dropdown icon"></i> <b>用户</b></a>
             <div class="content menu">
-              <router-link to="/business" class="item">
+              <router-link to="/example/business" class="item">
                 表格：代理商管理
               </router-link>
-              <router-link to="/form" class="item">
+              <router-link to="/example/form" class="item">
                 表单：文本输入与tinymce
               </router-link>
-              <router-link to="/formImageUpload" class="item">
+              <router-link to="/example/formImageUpload" class="item">
                 表单：图片选择器
+              </router-link>
+              <router-link to="/example/article" class="item">
+                文章：图文
+              </router-link>
+              <router-link to="/example/questionaire" class="item">
+                问卷生成器
               </router-link>
             </div>
         </div>
@@ -51,8 +57,8 @@
           <router-view></router-view>
       </div>
     </div>
-      
-      
+
+
   </div>
 </template>
 

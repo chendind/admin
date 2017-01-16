@@ -1,0 +1,37 @@
+/*
+  auxiliary.less
+  辅助类class
+  为防止与semantic的类名搞混，以x开头区分
+*/
+/*
+  mv系列， margin-top和margin-bottom值
+*/
+.mv10{
+  margin-top: 10px !important;
+  margin-bottom: 10px !important;
+}
+/*
+  pd系列，设置padding
+*/
+.pd5{
+  padding: 5px !important;
+}
+.pd10{
+  padding: 10px !important;
+}
+/*
+  清除浮动
+*/
+.after{
+  &:after{
+    content: '';
+    display: block;
+    clear: both;
+  }
+}
+.frontest{
+  z-index: 99999;
+}
+.pull-right{
+  float: right;
+}

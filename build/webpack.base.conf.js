@@ -3,6 +3,9 @@ var config = require('../config')
 var utils = require('./utils')
 var projectRoot = path.resolve(__dirname, '../')
 var copyWebpackPlugin = require('copy-webpack-plugin');
+
+var vuxLoader = require('vux-loader')
+
 var env = process.env.NODE_ENV
 // check env & config/index.js to decide whether to enable CSS source maps for the
 // various preprocessor loaders added to vue-loader at the end of this file
@@ -11,7 +14,7 @@ var cssSourceMapProd = (env === 'production' && config.build.productionSourceMap
 
 var useCssSourceMap = cssSourceMapDev || cssSourceMapProd
 
-module.exports = {
+var webpackConfig = {
   entry: {
     app: './src/main.js'
   },
@@ -28,6 +31,8 @@ module.exports = {
       'src': path.resolve(__dirname, '../src'),
       'assets': path.resolve(__dirname, '../src/assets'),
       'components': path.resolve(__dirname, '../src/components'),
+      'pages': path.resolve(__dirname, '../src/pages'),
+      'static': path.resolve(__dirname, '../static'),
       'root': path.resolve(__dirname, '../')
     }
   },
@@ -36,6 +41,7 @@ module.exports = {
   },
   module: {
     loaders: [
+
       {
         test: /\.vue$/,
         loader: 'vue'
@@ -85,3 +91,17 @@ module.exports = {
     ]
   }
 }
+module.exports = webpackConfig;
+// vuxLoader.merge(webpackConfig,{})
+//   , {
+//   options: {},
+//   plugins: [
+//   {
+//     name: 'style-parser',
+//     fn: function (source) {
+//       return "@import 'assets/less/variable.less'\n" + source
+//     }
+//   }
+//   ]
+// }
+// )

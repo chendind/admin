@@ -3,7 +3,7 @@
 		<div class="ui middle aligned center aligned grid" style="height: 80%;">
 		  <div class="column" style="max-width: 350px;">
 		    <h2 class="ui teal image header">
-		      <img src="~assets/logo.png" class="image">
+		      <img src="~assets/img/logo.png" class="image">
 		      <div class="content">
 		        西柚科技后台管理系统
 		      </div>
@@ -31,7 +31,7 @@
 		  </div>
 		</div>
 	</div>
-		
+
 </template>
 <script>
 export default {
@@ -47,7 +47,7 @@ export default {
     }
   },
   mounted(){
-  	
+
   }
 }
 </script>
@@ -57,7 +57,7 @@ export default {
 	position: absolute;
 	width: 100%;
 	height: 100%;
-	background-image: url('~assets/home-bg.jpg');
+	background-image: url('~assets/img/home-bg.jpg');
 	background-size: cover;
 	background-position: center;
 }

@@ -1,6 +1,6 @@
 <template>
   <div class="ui modal">
-    <div class="ui inverted dimmer" :class="{active: !uploaded}">
+    <div class="ui inverted dimmer frontest" :class="{active: !uploaded}">
       <div class="ui text loader">图片上传中</div>
     </div>
       <i class="close icon"></i>
@@ -10,12 +10,12 @@
       <div class="content">
         <div class="ui tiny images">
           <div v-for="(image, index) in images" class="ui small image" :class="{'disabled': index != checkedIndex}" :style="{backgroundImage: 'url('+image.src+')'}" @click="toggle(index)">
-            
+
           </div>
         </div>
       </div>
       <div class="actions">
-        
+
         <div class="ui deny button">
           取消
         </div>
@@ -34,7 +34,7 @@
 <script>
 var __src = "http://www.xiyoukeji.com/images/logo_xs.gif"
 export default {
-  name: 'imageChooseModal',
+  name: 'image-choose-modal',
   data () {
     return {
       images: [],

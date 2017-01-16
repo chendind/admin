@@ -359,27 +359,27 @@
           <div class="default text">Saved Contacts</div>
           <div class="menu">
             <div class="item" data-value="jenny" data-text="Jenny">
-              <img class="ui mini avatar image" src="~assets/eve.png">
+              <img class="ui mini avatar image" src="~assets/img/eve.png">
               Jenny Hess
             </div>
             <div class="item" data-value="elliot" data-text="Elliot">
-              <img class="ui mini avatar image" src="~assets/eve.png">
+              <img class="ui mini avatar image" src="~assets/img/eve.png">
               Elliot Fu
             </div>
             <div class="item" data-value="stevie" data-text="Stevie">
-              <img class="ui mini avatar image" src="~assets/eve.png">
+              <img class="ui mini avatar image" src="~assets/img/eve.png">
               Stevie Feliciano
             </div>
             <div class="item" data-value="christian" data-text="Christian">
-              <img class="ui mini avatar image" src="~assets/eve.png">
+              <img class="ui mini avatar image" src="~assets/img/eve.png">
               Christian
             </div>
             <div class="item" data-value="matt" data-text="Matt">
-              <img class="ui mini avatar image" src="~assets/eve.png">
+              <img class="ui mini avatar image" src="~assets/img/eve.png">
               Matt
             </div>
             <div class="item" data-value="justen" data-text="Justen">
-              <img class="ui mini avatar image" src="~assets/eve.png">
+              <img class="ui mini avatar image" src="~assets/img/eve.png">
               Justen Kitsune
             </div>
           </div>
@@ -404,7 +404,7 @@
 </template>
 
 <script>
-import tinymce from '../components/Tinymce.vue'
+import tinymce from 'components/tinymce/Tinymce.vue'
 export default {
   name: 'bussiness',
   components: {
