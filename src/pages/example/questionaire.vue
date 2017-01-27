@@ -42,30 +42,89 @@
             Third
           </div>
         </div>
-        <div class="nine wide column form-container">
-          <div class="ui padded segment form-view-wrapper">
-            <div class="ui large header">Second header</div>
-            <p>这是表单描述</p>
+        <div class="eight wide column form-container">
+          <div class="ui segment form-view-wrapper">
+            <div class="ui large header">{{form.title}}</div>
+            <p>{{form.description}}</p>
             <div class="ui form widget-control" @dragenter="dragenter()" @dragover.prevent="dragover()" @drop="drop()">
-              <field v-for="(field, $index) in form.fields" :field="field" :startEditField="()=>{startEditField(field)}"></field>
+              <div :class="{'focus': $index == focusIndex}" v-for="(field, $index) in form.fields" @click="startEditField($index)">
+                <div class="field widget" v-if="field.name == 'input'">
+                  <label>{{field.label}}<span v-if="!field.required">(选填)</span></label>
+                  <input type="text" v-model="field.value" :placeholder="field.placeholder">
+                </div>
+                <div class="field widget" v-if="field.name == 'textarea'">
+                  <label>{{field.label}}</label>
+                  <textarea :placeholder="field.placeholder" :rows="field.rows">{{field.value}}</textarea>
+                </div>
+                <div class="inline fields widget" v-if="field.name == 'checkbox'">
+                  <label>{{field.label}}</label>
+                  <div class="field" v-for="child in field.children">
+                    <div class="ui checkbox">
+                      <input type="checkbox" :value="child.value" v-model="field.value" class="hidden">
+                      <label>{{child.label}}</label>
+                    </div>
+                  </div>
+                </div>
+                <div class="inline fields widget" v-if="field.name == 'radio'">
+                  <label>{{field.label}}</label>
+                  <div class="field" v-for="child in field.children">
+                    <div class="ui radio checkbox">
+                      <input type="radio" :value="child.value" v-model="field.value" class="hidden">
+                      <label>{{child.label}}</label>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <!-- <template v-for="(field, $index) in form.fields">
+                <div class="field" v-if="field.name == 'input'" @click="startEditField($index)">
+                  <label>{{field.label}}<span v-if="!field.required">(选填)</span></label>
+                  <input type="text" v-model="field.value" :placeholder="field.placeholder">
+                </div>
+                <div class="field" v-if="field.name == 'textarea'" @click="startEditField($index)">
+                  <label>{{field.label}}</label>
+                  <textarea :placeholder="field.placeholder" :rows="field.rows">{{field.value}}</textarea>
+                </div>
+                <div class="inline fields" v-if="field.name == 'checkbox'" @click="startEditField($index)">
+                  <label>{{field.label}}</label>
+                  <div class="field" v-for="child in field.children">
+                    <div class="ui checkbox">
+                      <input type="checkbox" :value="child.value" v-model="field.value" class="hidden">
+                      <label>{{child.label}}</label>
+                    </div>
+                  </div>
+                </div>
+                <div class="inline fields" v-if="field.name == 'radio'" @click="startEditField($index)">
+                  <label>{{field.label}}</label>
+                  <div class="field" v-for="child in field.children">
+                    <div class="ui radio checkbox">
+                      <input type="radio" :value="child.value" v-model="field.value" class="hidden">
+                      <label>{{child.label}}</label>
+                    </div>
+                  </div>
+                </div>
+              </template> -->
             </div>
           </div>
         </div>
-        <div class="four wide column">
+        <div class="five wide column">
           <div class="ui top attached tabular menu">
-            <a class="item active" data-tab="b-first">控件设置</a>
-            <a class="item" data-tab="b-second">表单设置</a>
+            <a class="item active" data-tab="b-first">表单设置</a>
+            <a class="item" data-tab="b-second">控件设置</a>
           </div>
           <div class="ui bottom attached tab segment active" data-tab="b-first">
-            <!-- <div class="ui form"> -->
-              <!-- <field-setting :field="fieldData"></field-setting> -->
-              <!-- <div class="field" v-for="key in fieldData">
-
-                <label>标题</label>
-                <input type="text">
-              </div> -->
-            <!-- </div> -->
-            <div class="ui form" v-for="field in form.fields">
+            <div class="ui form">
+              <div class="field">
+                <label>表单标题</label>
+                <input type="text" v-model="form.title" placeholder="请输入表单标题">
+              </div>
+              <div class="field">
+                <label>表单描述</label>
+                <textarea rows="3" v-model="form.description" placeholder="请输入表单描述"></textarea>
+              </div>
+            </div>
+          </div>
+          <div class="ui bottom attached tab segment" data-tab="b-second">
+            <div class="ui form" v-for="(field,$index) in form.fields" v-show="$index == focusIndex">
                 <template v-for="(value,key) in field">
                   <div class="field" v-if="key=='label'">
                     <label>标题</label>
@@ -92,12 +151,24 @@
                     <label>默认值</label>
                     <input type="text" v-model="field.value">
                   </div>
+                  <div class="field" v-if="key == 'children'">
+                    <label>选项</label>
+                    <div class="inline field" v-for="(child,$index) in value">
+                      <div class="ui checkbox" :class="{'radio':field.type=='radio'}">
+                        <label>{{$index}}</label>
+                        <input v-if="field.type == 'radio'" type="radio" v-bind:value="child.value" v-model="field.value">
+                        <input v-if="field.type == 'checkbox'" type="checkbox" :value="child.value" v-model="field.value">
+                      </div>
+                      <input type="text" v-model="child.label" style="width: 120px;">
+                      <input type="text" v-model="child.value" style="width: 60px;">
+                      <i class="large plus square outline icon" @click="addChild(value,$index,{label: '选项', value: -1})"></i>
+                      <i class="large minus square outline icon" @click="removeChild(value,$index,{label: '选项', value: -1})"></i>
+                    </div>
+                  </div>
                 </template>
             </div>
           </div>
-          <div class="ui bottom attached tab segment" data-tab="b-second">
-            Second
-          </div>
+
         </div>
       </div>
     </div>
@@ -108,173 +179,122 @@
 
 <script>
 import Vue from 'vue'
-const formWidgets = {
-  input: {
-    name: 'input', //标签
-    tagName: 'input',
-    type: 'text',
-    label: '文本输入框',//标签题目
-    placeholder: '',
-    value:'',
-    required: true,
-    callback: {
-      input: "",
-      focus: "",
-      validate: ""
+const formWidgets = ()=>{
+  return {
+    input: {
+      name: 'input', //标签
+      tagName: 'input',
+      type: 'text',
+      label: '文本输入框',//标签题目
+      placeholder: '',
+      value:'',
+      required: true,
+      callback: {
+        input: "",
+        focus: "",
+        validate: ""
+      }
+    },
+    textarea: {
+      name: 'textarea', //标签
+      tagName: 'textarea',
+      type: 'text',
+      label: '多行文本框',//标签题目
+      placeholder: '',
+      value:'',
+      required: true,
+      callback: {
+        input: "",
+        focus: "",
+        validate: ""
+      },
+      rows: 3
+    },
+    radio: {
+      name: 'radio', //标签
+      tagName: 'input',
+      type: 'radio',
+      label: '单选框',//标签题目
+      value:'0',
+      required: true,
+      callback: {
+        input: "",
+        focus: "",
+        validate: ""
+      },
+      children: [
+        {label: '选项1',value: '0'},
+        {label: '选项2',value: '1'},
+        {label: '选项3',value: '2'}
+      ]
+    },
+    checkbox: {
+      name: 'checkbox', //标签
+      tagName: 'input',
+      type: 'checkbox',
+      label: '复选框',//标签题目
+      value:["0","1"],
+      required: true,
+      callback: {
+        input: "",
+        focus: "",
+        validate: ""
+      },
+      children: [
+        {label: '选项1',value: '0'},
+        {label: '选项2',value: '1'},
+        {label: '选项3',value: '2'}
+      ]
     }
-  },
-  textarea: {
-    name: 'textarea', //标签
-    tagName: 'textarea',
-    type: 'text',
-    label: '多行文本框',//标签题目
-    placeholder: '',
-    value:'',
-    required: true,
-    callback: {
-      input: "",
-      focus: "",
-      validate: ""
-    },
-    rows: 3
-  },
-  radio: {
-    name: 'radio', //标签
-    tagName: 'input',
-    type: 'radio',
-    label: '单选框',//标签题目
-    placeholder: '',
-    value:'',
-    required: true,
-    callback: {
-      input: "",
-      focus: "",
-      validate: ""
-    },
-    children: [
-      {label: '选项1',value: '选项1'},
-      {label: '选项2',value: '选项2'},
-      {label: '选项3',value: '选项3'}
-    ]
-  },
-  checkbox: {
-    name: 'checkbox', //标签
-    tagName: 'input',
-    type: 'checkbox',
-    label: '复选框',//标签题目
-    placeholder: '',
-    value:'',
-    required: true,
-    callback: {
-      input: "",
-      focus: "",
-      validate: ""
-    },
-    children: [
-      {label: '选项1',value: '选项1'},
-      {label: '选项2',value: '选项2'},
-      {label: '选项3',value: '选项3'}
-    ]
   }
-}
+};
+
+
 export default {
   name: 'questionaire',
   components: {
-    field: {
-      render: function(h){
-        var self = this
-        var Field = self.field
-        var childNodes = []
-        if(Field.name == "textarea"){
-          childNodes.push(h('label',Field.label+(Field.required==false?"(选填)":"")))
-          childNodes.push(
-            h(Field.tagName,
-              {attrs:{type: Field.type, placeholder: Field.placeholder, rows: Field.rows}},
-              Field.value
-          ))
-        }
-        else if(Field.name == "radio" || Field.name == "checkbox"){
-          var children = []
-          children.push(h('label',Field.label+(Field.required==false?"(选填)":"")))
-          for(var i in Field.children){
-            children.push(
-              h('div',{'class':{field: true}},[
-                h('div',{'class':{ui: true, radio: (Field.type == "radio"), checkbox: true}},[
-                    h('input',{attrs:{class: 'hidden',name:new Date()-0, type: Field.type, value: Field.children[i].value}}),
-                    h('label',Field.children[i].label)
-                  ])
-              ]))
-          }
-          childNodes.push(h('div',{'class': {inline:true, fields:true}},children))
-        }
-        else{
-          childNodes.push(h('label',Field.label+(Field.required==false?"(选填)":"")))
-          childNodes.push(h(Field.tagName,{attrs:{type: Field.type, placeholder: Field.placeholder, value: Field.value}}))
-        }
-        return h(
-          'div',
-          {
-            'class': {
-              field: true
-            },
-            on: {
-              click: self.startEditField
-            },
-          },
-          childNodes
-        )
-      },
-      props:{
-        field: {
-          type: Object,
-          required: true
-        },
-        state: {
-          type: String,
-          required: false,
-          default: 'build'
-        },
-        startEditField: {
-          type: Function,
-          required: false
-        }
-      }
-    }
   },
   methods:{
-    dragstart: function(name){
+    dragstart(name){
       this.dragingWidget = name;
     },
-    dragenter: ()=>{
+    dragenter(){
 
     },
-    dragover: ()=>{
+    dragover(){
       console.log("dragover")
     },
-    drop: function(){
-      let field = Object.assign({},formWidgets[this.dragingWidget])
+    drop(){
+      let field = Object.assign({},formWidgets()[this.dragingWidget])
       this.form.fields.push(field)
-      Vue.nextTick(function () {
+      Vue.nextTick(()=>{
         $('.ui.checkbox').checkbox()
       })
-      this.dragingWidget = "";
+      this.dragingWidget = ""
+      this.focusIndex = this.form.fields.length - 1
     },
-    startEditField: function(field){
-      this.fieldData = field;
-
+    startEditField(index){
+      this.focusIndex = index
+    },
+    addChild(children,index,child){
+      index = index-0+1
+      children.splice(index,0,child);
     }
   },
   data () {
     return {
       dragingWidget: "",
-      formWidgets: formWidgets,
+      formWidgets: formWidgets(),
       fieldData: {
       },
       form: {
+        title: "",
+        description: "",
         model: {},
         fields: [
         ]
-      }
+      },
+      focusIndex: -1
     }
   },
   mounted(){
@@ -283,7 +303,7 @@ export default {
 }
 </script>
 
-<style scoped>
+<style lang='less' scoped>
 .x-main-content{
   margin-top: 56px;
   padding: 15px;
@@ -295,5 +315,20 @@ export default {
 }
 .widget-control{
   min-height: 300px;
+  .widget{
+    margin: 0 -1em !important;
+    padding: 1em !important;
+    border-width: 1px;
+    border-style: dashed;
+    border-color: transparent;
+    &:hover{
+      border-color: #aaa !important;
+    }
+  }
+  .focus>.widget{
+    border-color: #ddd;
+    background-color: #fff8dc;
+  }
 }
+
 </style>

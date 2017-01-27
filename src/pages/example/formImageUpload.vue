@@ -3,16 +3,39 @@
   <div>
     <h1 class="ui dividing header">
       <div class="ui breadcrumb">
-        <a class="section">用户</a>
+        <a class="section">例子</a>
         <i class="right angle icon divider"></i>
-        <div class="active section">代理商管理</div>
+        <div class="active section">表单：图片选择器</div>
       </div>
     </h1>
-    <img id="expImage" src="~assets/img/default.png" class="ui small image" alt="">
-    <div class="ui button" @click="show('#imageChooseModal')" style="margin-top: 10px;">
-      选择一张图片
+    <div class="ui form">
+      <div class="fields">
+        <div class="six wide field">
+          <label>文章图片</label>
+          <div class="ui action input">
+            <input type="text" placeholder="请输入图片url">
+            <button class="ui button" @click="show('#imageChooseModal', 'img1')">选择图片</button>
+          </div>
+          <img :src="img1" v-show="img1" class="ui image small mv10">
+        </div>
+      </div>
     </div>
-    <image-choose-modal id="imageChooseModal" v-on:finishChoose="finishChoose"></image-choose-modal>
+    <div class="ui items">
+      <div class="item">
+        <div class="image">
+            <img :src="img2 || require('assets/img/default.png')">
+            <div class="ui container center aligned">
+              <button class="ui primary button mv10" @click="show('#imageChooseModal','img2')">
+                选择一张图片
+              </button>
+            </div>
+        </div>
+        <div class="content">
+        </div>
+      </div>
+    </div>
+
+    <image-choose-modal id="imageChooseModal" v-on:finishChoose="finishChoose" :target="target"></image-choose-modal>
 
   </div>
 
@@ -26,17 +49,19 @@ export default {
     'image-choose-modal': imageChooseModal
   },
   methods:{
-    show(selector){
+    show(selector, target){
       $(selector).modal('show')
+      this.target = target
     },
-    finishChoose(src){
-      console.log(src)
-      $('#expImage').attr('src', src)
+    finishChoose(src, target){
+      eval('this.'+target+'="'+src+'"')
     }
   },
   data () {
     return {
-      msg: 'Welcome to Your Vue.js App'
+      target: "",
+      img1: "",
+      img2: ""
     }
   },
   mounted(){

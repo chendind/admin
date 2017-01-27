@@ -293,7 +293,7 @@ export default {
       this.fireEvent('loading')
 
       this.httpOptions['params'] = this.getAllQueryParams()
-      console.log(this.apiUrl)
+
       Vue.http.get(this.apiUrl, this.httpOptions).then(
         success,
         failed

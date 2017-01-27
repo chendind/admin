@@ -3,9 +3,15 @@ export default {
   component:{ template: "<router-view></router-view>"},
   children: [
     {
-      path: 'business',
+      path: 'table',
       component(r){
-        r(require('pages/example/business.vue'))
+        r(require('pages/example/table.vue'))
+      }
+    },
+    {
+      path: 'vuetable',
+      component(r){
+        r(require('pages/example/vuetable.vue'))
       }
     },
     {

@@ -33,10 +33,13 @@
     <div class="x-main-content">
       <div class="ui sidebar sticky accordion vertical menu left visible floated" style="">
         <div class="item">
-            <a class="title"><i class="dropdown icon"></i> <b>用户</b></a>
+            <a class="title"><i class="dropdown icon"></i> <b>例子</b></a>
             <div class="content menu">
-              <router-link to="/example/business" class="item">
-                表格：代理商管理
+              <router-link to="/example/table" class="item">
+                表格：默认实现
+              </router-link>
+              <router-link to="/example/vuetable" class="item">
+                表格：vuetable实现
               </router-link>
               <router-link to="/example/form" class="item">
                 表单：文本输入与tinymce

@@ -14,9 +14,6 @@
         <input type="text" placeholder="请输入文章名称">
       </div>
       <div class="fields">
-        <!-- <div class="three wide field">
-
-        </div> -->
         <div class="six wide field">
           <label>文章图片</label>
           <div class="ui action input">

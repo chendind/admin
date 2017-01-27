@@ -1,3 +1,4 @@
+var webpack = require('webpack')
 var path = require('path')
 var config = require('../config')
 var utils = require('./utils')
@@ -9,21 +10,25 @@ var vuxLoader = require('vux-loader')
 var env = process.env.NODE_ENV
 // check env & config/index.js to decide whether to enable CSS source maps for the
 // various preprocessor loaders added to vue-loader at the end of this file
-var cssSourceMapDev = (env === 'development' && config.dev.cssSourceMap)
-var cssSourceMapProd = (env === 'production' && config.build.productionSourceMap)
+var isDev = env === 'development'
+var isProd = env === 'production'
+var cssSourceMapDev = (isDev && config.dev.cssSourceMap)
+var cssSourceMapProd = (isProd && config.build.productionSourceMap)
 
 var useCssSourceMap = cssSourceMapDev || cssSourceMapProd
 
-var webpackConfig = {
-  entry: {
+module.exports = function makeWebpackConfig() {
+  var __config = {}
+
+  __config.entry = {
     app: './src/main.js'
-  },
-  output: {
+  }
+  __config.output = {
     path: config.build.assetsRoot,
     publicPath: process.env.NODE_ENV === 'production' ? config.build.assetsPublicPath : config.dev.assetsPublicPath,
     filename: '[name].js'
-  },
-  resolve: {
+  }
+  __config.resolve = {
     extensions: ['', '.js', '.vue', '.json'],
     fallback: [path.join(__dirname, '../node_modules')],
     alias: {
@@ -35,13 +40,12 @@ var webpackConfig = {
       'static': path.resolve(__dirname, '../static'),
       'root': path.resolve(__dirname, '../')
     }
-  },
-  resolveLoader: {
+  }
+  __config.resolveLoader= {
     fallback: [path.join(__dirname, '../node_modules')]
-  },
-  module: {
+  }
+  __config.module= {
     loaders: [
-
       {
         test: /\.vue$/,
         loader: 'vue'
@@ -73,16 +77,21 @@ var webpackConfig = {
         }
       }
     ]
-  },
-  plugins: [
+  }
+  __config.plugins= [
       // new copyWebpackPlugin([
       //     { from: './node_modules/tinymce/plugins', to: './plugins' },
       //     { from: './node_modules/tinymce/themes', to: './themes' },
       //     { from: './node_modules/tinymce/skins', to: './skins' },
       //     { from: './node_modules/tinymce/langs', to: './langs' }
       // ])
-  ],
-  vue: {
+      new webpack.ProvidePlugin({
+          $: "jquery",
+          jQuery: "jquery",
+          "window.jQuery": "jquery"
+      })
+  ]
+  __config.vue= {
     loaders: utils.cssLoaders({ sourceMap: useCssSourceMap }),
     postcss: [
       require('autoprefixer')({
@@ -90,18 +99,9 @@ var webpackConfig = {
       })
     ]
   }
-}
-module.exports = webpackConfig;
-// vuxLoader.merge(webpackConfig,{})
-//   , {
-//   options: {},
-//   plugins: [
-//   {
-//     name: 'style-parser',
-//     fn: function (source) {
-//       return "@import 'assets/less/variable.less'\n" + source
-//     }
-//   }
-//   ]
-// }
-// )
+  if (isDev) {
+    // __config.devtool = 'inline-source-map';
+  }
+  return __config
+}();
+

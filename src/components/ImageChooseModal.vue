@@ -1,3 +1,7 @@
+<!--
+ImageChooseModal 图片选择器使用介绍
+1 完成选择：完成图片选择，点击确定后，发送事件`finishChoose`，并传入2个参数target和src，target为父组件中图片路径存储的变量路径，如imgage或image.url
+ -->
 <template>
   <div class="ui modal">
     <div class="ui inverted dimmer frontest" :class="{active: !uploaded}">
@@ -35,6 +39,12 @@
 var __src = "http://www.xiyoukeji.com/images/logo_xs.gif"
 export default {
   name: 'image-choose-modal',
+  props: {
+    target: {
+      type: String,
+      require: true
+    }
+  },
   data () {
     return {
       images: [],
@@ -47,10 +57,10 @@ export default {
       this.checkedIndex = index;
     },
     finishChoose(){
-      if(this.checkedIndex == -1){
+      if(this.checkedIndex == -1 || !this.target){
         return;
       }
-      this.$emit('finishChoose', this.images[this.checkedIndex].src)
+      this.$emit('finishChoose', this.target, this.images[this.checkedIndex].src)
     },
     uploadNewImage(){
       var self = this;
