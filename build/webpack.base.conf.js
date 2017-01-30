@@ -4,6 +4,7 @@ var config = require('../config')
 var utils = require('./utils')
 var projectRoot = path.resolve(__dirname, '../')
 var copyWebpackPlugin = require('copy-webpack-plugin');
+var autoprefixer = require('autoprefixer')
 
 var vuxLoader = require('vux-loader')
 
@@ -75,7 +76,11 @@ module.exports = function makeWebpackConfig() {
           limit: 10000,
           name: utils.assetsPath('fonts/[name].[hash:7].[ext]')
         }
-      }
+      },
+      // {
+      //   test: /\.(less)$/,
+      //   loader: ["style","css", "postcss","less"]
+      // },
     ]
   }
   __config.plugins= [
@@ -85,6 +90,7 @@ module.exports = function makeWebpackConfig() {
       //     { from: './node_modules/tinymce/skins', to: './skins' },
       //     { from: './node_modules/tinymce/langs', to: './langs' }
       // ])
+      require('autoprefixer'),
       new webpack.ProvidePlugin({
           $: "jquery",
           jQuery: "jquery",
@@ -94,9 +100,7 @@ module.exports = function makeWebpackConfig() {
   __config.vue= {
     loaders: utils.cssLoaders({ sourceMap: useCssSourceMap }),
     postcss: [
-      require('autoprefixer')({
-        browsers: ['last 2 versions']
-      })
+      require('autoprefixer')()
     ]
   }
   if (isDev) {
