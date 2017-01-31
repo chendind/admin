@@ -401,9 +401,13 @@ export default {
     startEditField(index){
       this.focusIndex = index
     },
-    removeField(index){
-      this.form.fields.splice(index,1)
-      this.focusIndex = -1
+    removeField(fieldIndex){
+      xy.confirm("您确定要删除这个控件吗？",(index)=>{
+        if(index == 1){
+          this.form.fields.splice(fieldIndex,1)
+          this.focusIndex = -1
+        }
+      })
     },
     addChild(children,index,child){
       index = index-0+1
