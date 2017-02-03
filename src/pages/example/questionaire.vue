@@ -28,7 +28,7 @@
             <a class="item" data-tab="a-third">Third</a>
           </div>
           <div class="ui bottom attached tab segment active" data-tab="a-first">
-            <div v-for="widget in formWidgets" class="ui secondary segment pd10 widget-item" title="拖拽控件至表单空白处" draggable="true" @dragstart="dragstart(widget.name)" @dragend="dragend($event)">
+            <div v-for="widget in formWidgets" class="ui secondary segment pd10 widget-item" title="拖拽控件至表单空白处" draggable="true" @dragstart="dragstart(widget,'新增')" @dragend="dragend($event)">
               {{widget.label}}
             </div>
           </div>
@@ -44,7 +44,7 @@
             <div class="ui large header">{{form.title}}</div>
             <p>{{form.description}}</p>
             <div id="widget-control" class="ui form widget-control" @dragenter="dragenter()" @dragover.prevent="dragover($event)" @drop="drop()">
-              <div :class="{'focus': $index == focusIndex}" v-for="(field, $index) in form.fields" @click="startEditField($index)">
+              <div :class="{'focus': $index == focusIndex}" v-for="(field, $index) in form.fields" @click="startEditField($index)" draggable="true" @dragstart="dragstart(field,'移动位置')">
                 <div class="field widget slot" v-if="field.name == 'slot'"></div>
                 <div class="field widget" :class="{'inline':field.orientation == 'horizontal'}" v-if="field.name == 'input'">
                   <label>{{field.label}}<span v-if="!field.required">(选填)</span></label>
@@ -135,6 +135,9 @@
             </div>
           </div>
           <div class="ui bottom attached tab segment" data-tab="b-second">
+            <div class="ui warning message" v-if="focusIndex < 0">
+              <p>请先选择控件</p>
+            </div>
             <div class="ui form" v-for="(field,$index) in form.fields" v-show="$index == focusIndex">
               <template v-for="(value,key) in field">
                 <div class="field" v-if="key=='label'">
@@ -305,7 +308,6 @@ const formWidgets = ()=>{
       checkedIndex: -1,
       callback: {
         change(event,index,select){
-          console.log(event.type == 'click')
           let checked = event.type == 'click' ? true : event.target.checked
           if(checked){
             select.checkedIndex = index
@@ -382,13 +384,14 @@ export default {
   data () {
     return {
       dragingWidget: "",
+      dragingType: "",
       formWidgets: formWidgets(),
       fieldData: {
       },
       widgetAxes: [],
       form: {
-        title: "",
-        description: "",
+        title: "表单标题",
+        description: "表单描述",
         model: {},
         fields: [
         ]
@@ -398,22 +401,25 @@ export default {
     }
   },
   watch: {
-    'form.fields': function(val){
-      Vue.nextTick(()=>{
-        $('.ui.checkbox').checkbox()
-        $('.ui.dropdown').dropdown()
-        // 获得已放入表单中的组建的垂直对称轴y坐标，用于计算插入位置
-        let widgets = $("#widget-control .widget:not(.slot)")
-        let axes = []
-        $.each(widgets,function(index){
-          axes.push($(this).position().top + $(this).outerHeight()/2)
+    'form.fields': {
+      handler(new_val, old_val){
+        Vue.nextTick(()=>{
+          $('.ui.checkbox').checkbox()
+          $('.ui.dropdown').dropdown()
+          // 获得已放入表单中的组建的垂直对称轴y坐标，用于计算插入位置
+          let widgets = $("#widget-control .widget:not(.slot)")
+          let axes = []
+          $.each(widgets,function(index){
+            axes.push($(this).position().top + $(this).outerHeight()/2)
+          })
+          this.widgetAxes = axes
         })
-        this.widgetAxes = axes
-      })
+      },
+      deep: true
     },
     'slotIndex': function(new_slotIndex,old_slotIndex){
       this.removeSlot()
-      console.log('old:'+old_slotIndex, 'focus:'+this.focusIndex, 'new_slotIndex:'+new_slotIndex)
+      // console.log('old:'+old_slotIndex, 'focus:'+this.focusIndex, 'new_slotIndex:'+new_slotIndex)
       // 在slotIndex的位置插入
       // 今日总结： focusIndex没必要这样做。应该用计算属性去做
       if(new_slotIndex > -1){
@@ -437,8 +443,9 @@ export default {
   computed: {
   },
   methods:{
-    dragstart(name){
-      this.dragingWidget = name
+    dragstart(widget, type){
+      this.dragingWidget = widget
+      this.dragingType = type
     },
     dragenter(){
 
@@ -463,14 +470,28 @@ export default {
       }
     },
     drop(){
-      let field = Object.assign({},formWidgets()[this.dragingWidget])
-      this.form.fields.splice(this.slotIndex, 0, field)
+      var _slotIndex = this.slotIndex
+      // 先移除slot，再插入widget
+      this.dragend()
+
+      let field
+      if(this.dragingType === '新增'){
+        // console.log(this.deepCopy(this.dragingWidget))
+        this.form.fields.splice(_slotIndex, 0, this.deepCopy(this.dragingWidget))
+      }
+      else if(this.dragingType === '移动位置'){
+        this.form.fields.splice(_slotIndex, 0, this.deepCopy(this.dragingWidget))
+        let _index = this.form.fields.indexOf(this.dragingWidget)
+        this.form.fields.splice(_index, 1)
+      }
       this.dragingWidget = ""
-      this.focusIndex = this.slotIndex
+      this.focusIndex = _slotIndex
     },
     dragend(event){
-      this.removeSlot()
-      this.slotIndex = -1
+      if(this.slotIndex != -1){
+        this.removeSlot()
+        this.slotIndex = -1
+      }
     },
     removeSlot(){
       for(let index in this.form.fields){
@@ -493,6 +514,9 @@ export default {
     addChild(children,index,child){
       index = index-0+1
       children.splice(index,0,child);
+    },
+    deepCopy(object){
+      return $.extend(true, {}, object);
     }
   },
   mounted(){
@@ -520,6 +544,7 @@ export default {
     border-width: 1px;
     border-style: dashed;
     border-color: transparent;
+    cursor: move;
     &:not(.slot):hover{
       border-color: #aaa !important;
     }
