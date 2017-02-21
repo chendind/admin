@@ -19,7 +19,7 @@ ImageChooseModal 图片选择器使用介绍
         </div>
       </div>
       <div class="actions">
-
+        <pagination v-if="total" :id="paginationId" css="ui floated pagination menu" :current="1" :total="total" :show="show" v-on:pageChange="pageChange"></pagination>
         <div class="ui deny button">
           取消
         </div>
@@ -37,6 +37,7 @@ ImageChooseModal 图片选择器使用介绍
 
 <script>
 var __src = "http://www.xiyoukeji.com/images/logo_xs.gif"
+var paginationId = 0
 export default {
   name: 'image-choose-modal',
   props: {
@@ -47,9 +48,12 @@ export default {
   },
   data () {
     return {
+      paginationId: `image-choose-modal-pagination-${paginationId++}`,
       images: [],
       checkedIndex: -1,
-      uploaded: true
+      uploaded: true,
+      total: 0,
+      show: 20,
     }
   },
   methods: {
@@ -83,9 +87,12 @@ export default {
           self.checkedIndex = 0;
         },500)
       }
+    },
+    pageChange(index){
+      console.log(idnex)
     }
   },
-  created(){
+  mounted(){
     setTimeout(()=>{
       this.images = [
         {

@@ -33,27 +33,30 @@
     <div class="x-main-content">
       <div class="ui sidebar sticky accordion vertical menu left visible floated" style="">
         <div class="item">
-            <a class="title"><i class="dropdown icon"></i> <b>例子</b></a>
-            <div class="content menu">
-              <router-link to="/example/table" class="item">
-                表格：默认实现
-              </router-link>
-              <router-link to="/example/vuetable" class="item">
-                表格：vuetable实现
-              </router-link>
-              <router-link to="/example/form" class="item">
-                表单：文本输入与tinymce
-              </router-link>
-              <router-link to="/example/formImageUpload" class="item">
-                表单：图片选择器
-              </router-link>
-              <router-link to="/example/article" class="item">
-                文章：图文
-              </router-link>
-              <router-link to="/example/questionaire" class="item">
-                问卷生成器
-              </router-link>
-            </div>
+          <a class="title"><i class="dropdown icon"></i> <b>例子</b></a>
+          <div class="content menu">
+            <router-link to="/example/table" class="item">
+              表格：默认实现
+            </router-link>
+            <router-link to="/example/vuetable" class="item">
+              表格：vuetable实现
+            </router-link>
+            <router-link to="/example/form" class="item">
+              表单：文本输入与tinymce
+            </router-link>
+            <router-link to="/example/formImageUpload" class="item">
+              表单：图片选择器
+            </router-link>
+            <router-link to="/example/article" class="item">
+              文章：图文
+            </router-link>
+            <router-link to="/example/questionaire" class="item">
+              问卷生成器
+            </router-link>
+            <router-link to="/example/sticky" class="item">
+              semantic测试
+            </router-link>
+          </div>
         </div>
       </div>
       <div class="ui fluid floated" style="margin-left: 280px;">
@@ -76,7 +79,7 @@ export default {
     }
   },
   mounted(){
-    $(".accordion").accordion();
+    $(".accordion").accordion()
     $("#userDrapdown").dropdown()
   }
 }

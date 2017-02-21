@@ -28,12 +28,14 @@
             <a class="item" data-tab="a-third">Third</a>
           </div>
           <div class="ui bottom attached tab segment active" data-tab="a-first">
-            <div v-for="widget in formWidgets" class="ui secondary segment pd10 widget-item" title="拖拽控件至表单空白处" draggable="true" @dragstart="dragstart(widget,'新增')" @dragend="dragend($event)">
+            <div v-for="widget in formWidgets" class="ui secondary segment pd10 widget-item" title="拖拽控件至表单" draggable="true" @dragstart="dragstart($event, widget,'新增')" @dragend="dragend($event)">
               {{widget.label}}
             </div>
           </div>
           <div class="ui bottom attached tab segment" data-tab="a-second">
-
+            <div v-for="layout in formLayouts" class="ui secondary segment pd10 widget-item" title="拖拽布局至表单" draggable="true" @dragstart="dragstart($event, layout,'新增')" @dragend="dragend($event)">
+              {{layout.label}}
+            </div>
           </div>
           <div class="ui bottom attached tab segment" data-tab="a-third">
             Third
@@ -44,19 +46,20 @@
             <div class="ui large header">{{form.title}}</div>
             <p>{{form.description}}</p>
             <div id="widget-control" class="ui form widget-control" @dragenter="dragenter()" @dragover.prevent="dragover($event)" @drop="drop()">
-              <div :class="{'focus': $index == focusIndex}" v-for="(field, $index) in form.fields" @click="startEditField($index)" draggable="true" @dragstart="dragstart(field,'移动位置')">
-                <div class="field widget slot" v-if="field.name == 'slot'"></div>
-                <div class="field widget" :class="{'inline':field.orientation == 'horizontal'}" v-if="field.name == 'input'">
+              <!-- <field></field> -->
+              <div :class="{'focus': $index == focusIndex}" v-for="(field, $index) in form.fields" @click="startEditField($index)" draggable="true" @dragstart="dragstart($event,field,'移动位置')">
+                <div class="field widget slot" v-if="field.name == 'slot'" :data-name="field.name"></div>
+                <div class="field widget" :class="{'inline':field.orientation == 'horizontal'}" v-if="field.name == 'input'" :data-name="field.name">
                   <label>{{field.label}}<span v-if="!field.required">(选填)</span></label>
                   <input type="text" v-model="field.value" :placeholder="field.placeholder">
                   <i class="remove circle red icon absolute vertical" @click="removeField($index)"></i>
                 </div>
-                <div class="field widget" v-if="field.name == 'textarea'">
+                <div class="field widget" v-if="field.name == 'textarea'" :data-name="field.name">
                   <label>{{field.label}}</label>
-                  <textarea :placeholder="field.placeholder" :rows="field.rows">{{field.value}}</textarea>
+                  <textarea :placeholder="field.placeholder" :rows="field.rows" v-model="field.value"></textarea>
                   <i class="remove circle red icon absolute vertical" @click="removeField($index)"></i>
                 </div>
-                <div class="fields widget" :class="{'grouped':field.orientation == 'vertical','inline':field.orientation == 'horizontal'}" v-if="field.name == 'checkbox'">
+                <div class="fields widget" :class="{'grouped':field.orientation == 'vertical','inline':field.orientation == 'horizontal'}" v-if="field.name == 'checkbox'" :data-name="field.name">
                   <label>{{field.label}}</label>
                   <div class="field" v-for="(child, $index) in field.children">
                     <div class="ui checkbox">
@@ -66,7 +69,7 @@
                   </div>
                   <i class="remove circle red icon absolute vertical" @click="removeField($index)"></i>
                 </div>
-                <div class="fields widget" :class="{'grouped':field.orientation == 'vertical','inline':field.orientation == 'horizontal'}" v-if="field.name == 'radio'">
+                <div class="fields widget" :class="{'grouped':field.orientation == 'vertical','inline':field.orientation == 'horizontal'}" v-if="field.name == 'radio'" :data-name="field.name">
                   <label>{{field.label}}</label>
                   <div class="field" v-for="(child, $index) in field.children">
                     <div class="ui radio checkbox">
@@ -76,7 +79,7 @@
                   </div>
                   <i class="remove circle red icon absolute vertical" @click="removeField($index)"></i>
                 </div>
-                <div class="field widget" :class="{'inline':field.orientation == 'horizontal'}" v-if="field.name == 'select'">
+                <div class="field widget" :class="{'inline':field.orientation == 'horizontal'}" v-if="field.name == 'select'" :data-name="field.name">
                   <label>{{field.label}}</label>
                   <div class="ui selection dropdown">
                     <input type="hidden">
@@ -90,17 +93,17 @@
                   </div>
                   <i class="remove circle red icon absolute vertical" @click="removeField($index)"></i>
                 </div>
-                <div class="field widget" :class="{'inline':field.orientation == 'horizontal'}" v-if="field.name == 'date'">
+                <div class="field widget" :class="{'inline':field.orientation == 'horizontal'}" v-if="field.name == 'date'" :data-name="field.name">
                   <label>{{field.label}}<span v-if="!field.required">(选填)</span></label>
                   <input type="date" v-model="field.value" :placeholder="field.placeholder">
                   <i class="remove circle red icon absolute vertical" @click="removeField($index)"></i>
                 </div>
-                <div class="field widget" :class="{'inline':field.orientation == 'horizontal'}" v-if="field.name == 'time'">
+                <div class="field widget" :class="{'inline':field.orientation == 'horizontal'}" v-if="field.name == 'time'" :data-name="field.name">
                   <label>{{field.label}}<span v-if="!field.required">(选填)</span></label>
                   <input type="time" v-model="field.value" :placeholder="field.placeholder">
                   <i class="remove circle red icon absolute vertical" @click="removeField($index)"></i>
                 </div>
-                <div class="field widget" v-if="field.name == 'image'">
+                <div class="field widget" v-if="field.name == 'image'" :data-name="field.name">
                   <label>{{field.label}}<span v-if="!field.required">(选填)</span></label>
                   <div class="ui container after mv10">
                     <div class="ui center aligned segment imageUpload" @click="field.callback.click($event,field)">
@@ -185,7 +188,7 @@
                     <input type="text" v-model="child.label" style="width: 150px;">
                     <input type="text" v-model="child.value" style="width: 60px;">
                     <i class="large plus square outline icon" @click="addChild(value,$index,{label: '选项', value: -1})"></i>
-                    <i class="large minus square outline icon" @click="removeChild(value,$index,{label: '选项', value: -1})"></i>
+                    <i class="large minus square outline icon" @click="removeChild(value,$index)"></i>
                   </div>
                 </div>
                 <div class="field" v-if="key == 'orientation'">
@@ -223,6 +226,7 @@
 
 <script>
 import Vue from 'vue'
+// 表单控件工厂函数
 const formWidgets = ()=>{
   return {
     input: {
@@ -375,17 +379,40 @@ const formWidgets = ()=>{
     },
   }
 };
-
-
+// 表单布局工厂函数
+const formLayouts = ()=>{
+  return {
+    'row-with-2-col':{
+      name: 'row-with-2-col',
+      label: '一行两列布局',
+      size: 2,
+      children: []
+    },
+    'row-with-3-col':{
+      name: 'row-with-3-col',
+      label: '一行三列布局',
+      size: 3,
+      children: []
+    }
+  }
+}
 export default {
   name: 'questionaire',
   components: {
+    field: {
+      render(h){
+        return h({
+          template:`<div class="hehe">😄</div>`
+        })
+      }
+    }
   },
   data () {
     return {
       dragingWidget: "",
       dragingType: "",
       formWidgets: formWidgets(),
+      formLayouts: formLayouts(),
       fieldData: {
       },
       widgetAxes: [],
@@ -407,10 +434,19 @@ export default {
           $('.ui.checkbox').checkbox()
           $('.ui.dropdown').dropdown()
           // 获得已放入表单中的组建的垂直对称轴y坐标，用于计算插入位置
-          let widgets = $("#widget-control .widget:not(.slot)")
+          let widgets = $("#widget-control>div>.widget:not(.slot)")
           let axes = []
           $.each(widgets,function(index){
-            axes.push($(this).position().top + $(this).outerHeight()/2)
+            let ceiling = $(this).position().top,
+            outerHeight = $(this).outerHeight();
+            axes.push({
+              name: $(this).data('name'),
+              quarterline_1: ceiling + outerHeight*1/4,
+              quarterline_2: ceiling + outerHeight*2/4,
+              quarterline_3: ceiling + outerHeight*3/4,
+              ceiling: ceiling,
+              floor: ceiling + outerHeight
+            })
           })
           this.widgetAxes = axes
         })
@@ -423,9 +459,16 @@ export default {
       // 在slotIndex的位置插入
       // 今日总结： focusIndex没必要这样做。应该用计算属性去做
       if(new_slotIndex > -1){
-        this.form.fields.splice(new_slotIndex, 0, {
-          name: 'slot'
-        })
+        let widgetIndex = this.form.fields.indexOf(this.dragingWidget)
+        if(this.dragingType == '移动位置' && (widgetIndex == new_slotIndex || widgetIndex == new_slotIndex - 1)){
+          // 如果是移动位置，当在自己上下两边移动的时候不出现slot
+        }
+        else{
+          this.form.fields.splice(new_slotIndex, 0, {
+            name: 'slot'
+          })
+        }
+
         if((old_slotIndex == -1 || old_slotIndex > this.focusIndex) && new_slotIndex <= this.focusIndex){
           this.focusIndex ++
         }
@@ -443,7 +486,9 @@ export default {
   computed: {
   },
   methods:{
-    dragstart(widget, type){
+    dragstart(event, widget, type){
+      // event.dataTransfer.setData('dragingWidget', widget)
+      // event.dataTransfer.setData('dragingType', type)
       this.dragingWidget = widget
       this.dragingType = type
     },
@@ -451,20 +496,22 @@ export default {
 
     },
     dragover(event){
-      let y = event.pageY - $("#widget-control").offset().top
-      let length = this.widgetAxes.length - 0
-      if(!length){
-        this.slotIndex = 0
-      }
-      else{
-        for(let _index in this.widgetAxes){
-          if(y>this.widgetAxes[length - 1]){
-            this.slotIndex = length
-            break
-          }
-          else if(y<this.widgetAxes[_index]){
-            this.slotIndex = _index - 0
-            break
+      if(this.dragingType == '新增' || this.form.fields.length > 1){
+        let y = event.pageY - $("#widget-control").offset().top
+        let length = this.widgetAxes.length - 0
+        if(!length){
+          this.slotIndex = 0
+        }
+        else{
+          for(let _index in this.widgetAxes){
+            if(y>this.widgetAxes[length - 1]['quarterline_2']){
+              this.slotIndex = length
+              break
+            }
+            else if(y<this.widgetAxes[_index]['quarterline_2']){
+              this.slotIndex = _index - 0
+              break
+            }
           }
         }
       }
@@ -480,9 +527,12 @@ export default {
         this.form.fields.splice(_slotIndex, 0, this.deepCopy(this.dragingWidget))
       }
       else if(this.dragingType === '移动位置'){
-        this.form.fields.splice(_slotIndex, 0, this.deepCopy(this.dragingWidget))
         let _index = this.form.fields.indexOf(this.dragingWidget)
         this.form.fields.splice(_index, 1)
+        if(_index < _slotIndex){
+          _slotIndex --
+        }
+        this.form.fields.splice(_slotIndex, 0, this.dragingWidget)
       }
       this.dragingWidget = ""
       this.focusIndex = _slotIndex
@@ -513,10 +563,18 @@ export default {
     },
     addChild(children,index,child){
       index = index-0+1
-      children.splice(index,0,child);
+      children.splice(index,0,child)
+    },
+    removeChild(children,index){
+      if(children.length > 1){
+        children.splice(index,1)
+      }
+      else{
+        xy.toast('再减就没了')
+      }
     },
     deepCopy(object){
-      return $.extend(true, {}, object);
+      return $.extend(true, {}, object)
     }
   },
   mounted(){

@@ -1,4 +1,3 @@
-import jQuery from 'jquery'
 ;(function($,window,document,undefined){
     //配置参数
     var defaults = {

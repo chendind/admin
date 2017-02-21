@@ -8,14 +8,6 @@
 
 </template>
 <script>
-require.context(
-  'file?name=[path][name].[ext]&context=node_modules/tinymce!tinymce',
-  true,
-  /.*/
-);
-import 'tinymce/skins/lightgray/skin.min.css'
-import tinymce from 'tinymce'
-import './plugins/lineheight/plugin.js'
 import imageChooseModal from 'components/ImageChooseModal.vue'
 export default {
     name: 'tinymce',
@@ -52,7 +44,7 @@ export default {
       this.editor =  new tinymce.Editor(self.id, {
           height: self.height,
           theme: 'modern',
-          language_url: require('file-loader!./langs/zh_CN.js'),
+          language: 'zh_CN',
           plugins: [
               'lineheight advlist autolink lists link image charmap print preview hr anchor pagebreak',
               'searchreplace wordcount visualblocks visualchars code fullscreen',

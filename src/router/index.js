@@ -21,10 +21,16 @@ const routes = [
         r(require('pages/example/questionaire.vue'))
       }
     },
+    {
+      path: '/example/sticky',
+      component(r){
+        r(require('pages/example/sticky.vue'))
+      }
+    },
   	{
-    		path: '/login',
-    		component: Login,
-  		  children: []
+  		path: '/login',
+  		component: Login,
+		  children: []
   	}
 ]
 export default new VueRouter({

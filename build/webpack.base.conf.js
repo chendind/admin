@@ -90,12 +90,12 @@ module.exports = function makeWebpackConfig() {
       //     { from: './node_modules/tinymce/skins', to: './skins' },
       //     { from: './node_modules/tinymce/langs', to: './langs' }
       // ])
-      require('autoprefixer'),
-      new webpack.ProvidePlugin({
-          $: "jquery",
-          jQuery: "jquery",
-          "window.jQuery": "jquery"
-      })
+      // require('autoprefixer'),
+      // new webpack.ProvidePlugin({
+      //     $: "jquery",
+      //     jQuery: "jquery",
+      //     "window.jQuery": "jquery"
+      // })
   ]
   __config.vue= {
     loaders: utils.cssLoaders({ sourceMap: useCssSourceMap }),
