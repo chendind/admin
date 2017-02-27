@@ -182,9 +182,7 @@ export default {
   mounted(){
     var self = this
     $(".ui.dropdown").dropdown()
-    setTimeout(()=>{
-      this.$refs.tinymce.setContent('content changed')
-    },3000)
+    this.$refs.tinymce.setContent('content changed')
   }
 }
 </script>

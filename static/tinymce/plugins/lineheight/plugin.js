@@ -22,8 +22,8 @@
             });
             return {
                 type: 'listbox',
-                text: 'Line Height',
-                tooltip: 'Line Height',
+                text: '行高',
+                tooltip: '行高',
                 values: items,
                 fixedWidth: true,
                 onPostRender: function() {

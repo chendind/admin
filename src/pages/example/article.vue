@@ -18,7 +18,7 @@
           <label>文章图片</label>
           <div class="ui action input">
             <input type="text" placeholder="请输入图片url">
-            <button class="ui button" @click="show('#imageChooseModal')">选择图片</button>
+            <button class="ui button" @click="show('#imageChooseModal','img.src')">选择图片</button>
           </div>
           <img :src="img.src" v-show="img.src" class="ui image small mv10">
         </div>
@@ -94,11 +94,13 @@ export default {
     imageChooseModal
   },
   methods:{
-    show(selector){
+    show(selector, target){
+      this.target = target
       $(selector).modal('show')
     },
-    finishChoose(src){
-      this.img.src=src
+    finishChoose(target, src){
+      console.log('this.'+target+'="'+src+'"')
+      eval('this.'+target+'="'+src+'"')
     }
   },
   data () {

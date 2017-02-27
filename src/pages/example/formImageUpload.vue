@@ -13,7 +13,7 @@
         <div class="six wide field">
           <label>文章图片</label>
           <div class="ui action input">
-            <input type="text" placeholder="请输入图片url">
+            <input type="text" placeholder="请输入图片url" v-model="img1">
             <button class="ui button" @click="show('#imageChooseModal', 'img1')">选择图片</button>
           </div>
           <img :src="img1" v-show="img1" class="ui image small mv10">
@@ -50,10 +50,12 @@ export default {
   },
   methods:{
     show(selector, target){
-      $(selector).modal('show')
       this.target = target
+      $(selector).modal('show')
     },
-    finishChoose(src, target){
+    finishChoose(target, src){
+      console.log(target, src)
+      console.log('this.'+target+'="'+src+'"')
       eval('this.'+target+'="'+src+'"')
     }
   },

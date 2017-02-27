@@ -4,7 +4,7 @@ ImageChooseModal 图片选择器使用介绍
  -->
 <template>
   <div class="ui modal">
-    <div class="ui inverted dimmer frontest" :class="{active: !uploaded}">
+    <div class="ui inverted dimmer" :class="{active: !uploaded}">
       <div class="ui text loader">图片上传中</div>
     </div>
       <i class="close icon"></i>
@@ -43,7 +43,7 @@ export default {
   props: {
     target: {
       type: String,
-      require: true
+      require: false
     }
   },
   data () {
@@ -61,10 +61,15 @@ export default {
       this.checkedIndex = index;
     },
     finishChoose(){
-      if(this.checkedIndex == -1 || !this.target){
+      if(this.checkedIndex == -1){
         return;
       }
-      this.$emit('finishChoose', this.target, this.images[this.checkedIndex].src)
+      if(this.target){
+        this.$emit('finishChoose', this.target, this.images[this.checkedIndex].src)
+      }
+      else{
+        this.$emit('finishChoose', this.images[this.checkedIndex].src)
+      }
     },
     uploadNewImage(){
       var self = this;
