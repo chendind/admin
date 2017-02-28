@@ -54,8 +54,6 @@ export default {
       $(selector).modal('show')
     },
     finishChoose(target, src){
-      console.log(target, src)
-      console.log('this.'+target+'="'+src+'"')
       eval('this.'+target+'="'+src+'"')
     }
   },

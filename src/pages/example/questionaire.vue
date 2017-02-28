@@ -10,9 +10,9 @@
           西柚表单生成器
         </div>
         <div class="right item">
-          <button class="ui primary button" style="margin-right: 10px;">
+          <router-link :to="{path: '/example/questionairePreview', query: {form: JSON.stringify(form)}}" target="_blank" class="ui primary button" style="margin-right: 10px;">
             预览
-          </button>
+          </router-link>
           <button class="ui positive button">
             保存并发布
           </button>
@@ -42,7 +42,7 @@
           </div>
         </div>
         <div class="eight wide column form-container">
-          <div class="ui segment form-view-wrapper">
+          <div class="ui segment form-view-wrapper" :style="{'background-image':'url('+form.backgroundImage+')'}">
             <div class="ui large header">{{form.title}}</div>
             <p>{{form.description}}</p>
             <div id="widget-control" class="ui form widget-control" @dragenter="dragenter()" @dragover.prevent="dragover($event)" @drop="drop()">
@@ -79,12 +79,27 @@
                   </div>
                   <i class="remove circle red icon absolute vertical" @click="removeField($index)"></i>
                 </div>
+                <!-- <div class="field widget">
+                  <label>test</label>
+                  <div class="ui selection dropdown">
+                    <input type="hidden" value="0">
+                    <i class="dropdown icon"></i>
+                    <div class="text"></div>
+                    <div class="menu">
+                      <div class="item" data-value="0">111</div>
+                      <div class="item" data-value="1"></div>
+                      <div class="item" data-value="2">222</div>
+                    </div>
+                  </div>
+                  <i class="remove circle red icon absolute vertical" @click="removeField($index)"></i>
+                </div> -->
                 <div class="field widget" :class="{'inline':field.orientation == 'horizontal'}" v-if="field.name == 'select'" :data-name="field.name">
                   <label>{{field.label}}</label>
-                  <div class="ui selection dropdown">
+                  <div class="ui selection dropdown" id="selector">
+
                     <input type="hidden">
                     <i class="dropdown icon"></i>
-                    <div class="text" :class="{'default':field.checkedIndex<0}">{{field.checkedIndex<0?field.placeholder:field.children[field.checkedIndex].label}}</div>
+                    <div class="text" :class="{'default':field.checkedIndex<0}">{{(field.checkedIndex<0)?field.placeholder:field.children[field.checkedIndex].label}}</div>
                     <div class="menu">
                       <template v-for="(child, $index) in field.children">
                         <div class="item" :class="{'active selected':child.checked}" :data-value="child.value" @click="field.callback.change($event,$index,field)">{{child.label}}</div>
@@ -135,6 +150,37 @@
                 <label>表单描述</label>
                 <textarea rows="3" v-model="form.description" placeholder="请输入表单描述"></textarea>
               </div>
+              <div class="field">
+                <label>背景图设置</label>
+                <div class="ui action input">
+                  <input type="text" placeholder="请输入背景图url" v-model="form.backgroundImage">
+                  <button class="ui button" @click="show('#questionaire-imageChooseModal', 'form.backgroundImage')">选择图片</button>
+                </div>
+              </div>
+              <!-- <div class="field">
+                <div class="inline field">
+                  <div class="ui checkbox">
+                    <input type="checkbox">
+                    <label>背景图x向重复</label>
+                  </div>
+                  <div class="ui checkbox">
+                    <input type="checkbox">
+                    <label>背景图y向重复</label>
+                  </div>
+                </div>
+              </div>
+              <div class="field">
+                <label>背景图对齐方式</label>
+                <div class="ui selection dropdown">
+                  <input type="hidden">
+                  <i class="dropdown icon"></i>
+                  <div class="text"></div>
+                  <div class="menu">
+                    <div class="item selected" data-value="1">中心对齐</div>
+                    <div class="item" data-value="1">左上对齐</div>
+                  </div>
+                </div>
+              </div> -->
             </div>
           </div>
           <div class="ui bottom attached tab segment" data-tab="b-second">
@@ -219,13 +265,14 @@
         </div>
       </div>
     </div>
-
+    <image-choose-modal id="questionaire-imageChooseModal" v-on:finishChoose="finishChoose" :target="imageChooseModalTarget"></image-choose-modal>
   </div>
 
 </template>
 
 <script>
 import Vue from 'vue'
+import imageChooseModal from 'components/ImageChooseModal.vue'
 // 表单控件工厂函数
 const formWidgets = ()=>{
   return {
@@ -302,6 +349,7 @@ const formWidgets = ()=>{
       type: 'select',
       label: '下拉菜单',
       placeholder: '',
+      value: '',
       required: true,
       orientation: 'vertical',
       children: [
@@ -399,6 +447,7 @@ const formLayouts = ()=>{
 export default {
   name: 'questionaire',
   components: {
+    imageChooseModal,
     field: {
       render(h){
         return h({
@@ -419,12 +468,14 @@ export default {
       form: {
         title: "表单标题",
         description: "表单描述",
+        backgroundImage: "",
         model: {},
         fields: [
         ]
       },
       focusIndex: -1,
-      slotIndex: -1
+      slotIndex: -1,
+      imageChooseModalTarget: "",
     }
   },
   watch: {
@@ -432,7 +483,7 @@ export default {
       handler(new_val, old_val){
         Vue.nextTick(()=>{
           $('.ui.checkbox').checkbox()
-          $('.ui.dropdown').dropdown()
+          $('.ui.dropdown').dropdown("remove selected","")
           // 获得已放入表单中的组建的垂直对称轴y坐标，用于计算插入位置
           let widgets = $("#widget-control>div>.widget:not(.slot)")
           let axes = []
@@ -575,6 +626,13 @@ export default {
     },
     deepCopy(object){
       return $.extend(true, {}, object)
+    },
+    show(selector, target){
+      this.imageChooseModalTarget = target
+      $(selector).modal('show')
+    },
+    finishChoose(target, src){
+      eval('this.'+target+'="'+src+'"')
     }
   },
   mounted(){
@@ -624,6 +682,11 @@ export default {
   }
 
 }
+.form-view-wrapper{
+  background-repeat: no-repeat;
+  background-position: center;
+  background-size: 100%;
+}
 .imageUpload{
   width: 120px;
   height: 120px;
@@ -631,5 +694,9 @@ export default {
   float: left;
   color: #999;
   cursor: pointer;
+  i.icon{
+    margin-right: 0;
+  }
 }
+
 </style>

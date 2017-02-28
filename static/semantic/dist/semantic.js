@@ -4296,7 +4296,6 @@ $.fn.dropdown = function(parameters) {
         menuObserver,
         module
       ;
-
       module = {
 
         initialize: function() {
