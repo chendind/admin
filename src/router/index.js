@@ -22,6 +22,12 @@ const routes = [
       }
     },
     {
+      path: '/example/questionaire_test',
+      component(r){
+        r(require('pages/example/questionaire_test.vue'))
+      }
+    },
+    {
       path: '/example/questionairePreview',
       component(r){
         r(require('pages/example/questionairePreview.vue'))
