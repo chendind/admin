@@ -86,7 +86,7 @@
 
 <script>
 import tinymce from 'components/tinymce/Tinymce.vue'
-import imageChooseModal from 'components/ImageChooseModal.vue'
+import imageChooseModal from 'components/image-choose-modal/ImageChooseModal.vue'
 export default {
   name: '',
   components: {

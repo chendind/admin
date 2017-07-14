@@ -1,7 +1,3 @@
-<!--
-ImageChooseModal 图片选择器使用介绍
-1 完成选择：完成图片选择，点击确定后，发送事件`finishChoose`，并传入2个参数target和src，target为父组件中图片路径存储的变量路径，如imgage或image.url
- -->
 <template>
   <div class="ui modal">
     <div class="ui inverted dimmer" :class="{active: !uploaded}">
@@ -14,12 +10,11 @@ ImageChooseModal 图片选择器使用介绍
       <div class="content">
         <div class="ui tiny images">
           <div v-for="(image, index) in images" class="ui small image" :class="{'disabled': index != checkedIndex}" :style="{backgroundImage: 'url('+image.src+')'}" @click="toggle(index)">
-
           </div>
         </div>
       </div>
       <div class="actions">
-        <pagination v-if="total" :id="paginationId" css="ui floated pagination menu" :current="1" :total="total" :show="show" v-on:pageChange="pageChange"></pagination>
+        <pagination v-show="total>show" :id="paginationId" css="ui floated pagination menu" :current="1" :total="total" :show="show" v-on:pageChange="pageChange"></pagination>
         <div class="ui deny button">
           取消
         </div>
@@ -38,13 +33,14 @@ ImageChooseModal 图片选择器使用介绍
 <script>
 var __src = "http://www.xiyoukeji.com/images/logo_xs.gif"
 var paginationId = 0
+
+import Pagination from 'components/pagination/Pagination.vue'
 export default {
   name: 'image-choose-modal',
   props: {
-    target: {
-      type: String,
-      require: false
-    }
+  },
+  components: {
+    Pagination,
   },
   data () {
     return {

@@ -1,8 +1,8 @@
 {
-  "name": "admin",
+  "name": "admin-semantic",
   "version": "1.0.0",
-  "description": "A Vue.js project",
-  "author": "chendind",
+  "description": "西柚后台管理系统",
+  "author": "chendind@xiyoukeji.com",
   "private": true,
   "scripts": {
     "dev": "node build/dev-server.js",

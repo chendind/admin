@@ -3,9 +3,9 @@
 		<div class="ui middle aligned center aligned grid" style="height: 80%;">
 		  <div class="column" style="max-width: 350px;">
 		    <h2 class="ui teal image header">
-		      <img src="~assets/img/logo.png" class="image">
+		      <img :src="$root.config.project.logo" class="image">
 		      <div class="content">
-		        西柚科技后台管理系统
+            {{$root.config.project.name}}
 		      </div>
 		    </h2>
 		    <div class="ui large form">

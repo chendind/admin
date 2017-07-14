@@ -14,7 +14,7 @@
           <label>文章图片</label>
           <div class="ui action input">
             <input type="text" placeholder="请输入图片url" v-model="img1">
-            <button class="ui button" @click="show('#imageChooseModal', 'img1')">选择图片</button>
+            <button class="ui button" @click="show()">选择图片</button>
           </div>
           <img :src="img1" v-show="img1" class="ui image small mv10">
         </div>
@@ -25,7 +25,7 @@
         <div class="image">
             <img :src="img2 || require('assets/img/default.png')">
             <div class="ui container center aligned">
-              <button class="ui primary button mv10" @click="show('#imageChooseModal','img2')">
+              <button class="ui primary button mv10" @click="show2()">
                 选择一张图片
               </button>
             </div>
@@ -35,27 +35,38 @@
       </div>
     </div>
 
-    <image-choose-modal id="imageChooseModal" v-on:finishChoose="finishChoose" :target="target"></image-choose-modal>
-
   </div>
 
 </template>
 
 <script>
-import imageChooseModal from 'components/ImageChooseModal.vue'
 export default {
   name: 'bussiness',
   components: {
-    'image-choose-modal': imageChooseModal
   },
   methods:{
-    show(selector, target){
-      this.target = target
-      $(selector).modal('show')
+    show(){
+      window.BusVue.$emit('show:image-choose-modal')
+      let promise = new Promise((resolve, reject) => {
+        window.BusVue.$once('finishChoose:image-choose-modal', (src) => {
+          resolve(src)
+        })
+      })
+      promise.then((src) => {
+        this.img1 = src
+      })
     },
-    finishChoose(target, src){
-      eval('this.'+target+'="'+src+'"')
-    }
+    show2(){
+      window.BusVue.$emit('show:image-choose-modal')
+      let promise = new Promise((resolve, reject) => {
+        window.BusVue.$once('finishChoose:image-choose-modal', (src) => {
+          resolve(src)
+        })
+      })
+      promise.then((src) => {
+        this.img2 = src
+      })
+    },
   },
   data () {
     return {

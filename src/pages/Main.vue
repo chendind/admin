@@ -1,5 +1,4 @@
 <template>
-
   <div>
     <div class="ui fixed menu">
       <div class="ui fluid container">

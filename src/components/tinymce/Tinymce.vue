@@ -1,15 +1,14 @@
 <template>
-    <div>
-        <textarea :id="id">
-            <slot></slot>
-        </textarea>
-        <image-choose-modal :id="imageChooseModalId" v-on:finishChoose="finishChoose"></image-choose-modal>
-    </div>
-
+  <div>
+    <textarea :id="id">
+        <slot></slot>
+    </textarea>
+    <image-choose-modal :id="imageChooseModalId" v-on:finishChoose="finishChoose"></image-choose-modal>
+  </div>
 </template>
 <script>
 var imageChooseModalIndex = 0
-import imageChooseModal from 'components/ImageChooseModal.vue'
+import imageChooseModal from 'components/image-choose-modal/ImageChooseModal.vue'
 export default {
     name: 'tinymce',
     props: ['id','height'],

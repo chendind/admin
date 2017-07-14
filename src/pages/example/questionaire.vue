@@ -258,7 +258,7 @@
 
 <script>
 import Vue from 'vue'
-import imageChooseModal from 'components/ImageChooseModal.vue'
+import imageChooseModal from 'components/image-choose-modal/ImageChooseModal.vue'
 // 表单控件工厂函数
 const formWidgets = ()=>{
   return {
